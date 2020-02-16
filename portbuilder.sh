@@ -120,9 +120,13 @@ $PORTSNAP update
 $PKG update
 $PKG upgrade
 
-$PKG install `(for port in $to_build; do
+depends="`(for port in $to_build; do
    build_depends "$port"
-done)|sort|uniq|grep -v /pkg$|portname_filter|ignore_installed`
+done)|sort|uniq|grep -v /pkg$|portname_filter|ignore_installed`"
+
+if [ "$depends" != "" ]; then
+   $PKG install $depends
+fi
 
 #
 # Now we build the packages.

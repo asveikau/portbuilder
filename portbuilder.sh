@@ -84,11 +84,11 @@ EOF
    done
 }
 
-# If ports are installed, omit them from the list.
+# Some ports don't have prebuilt package
 #
-ignore_installed() {
+ignore_empty_rquery() {
    while read port; do
-      pkg info "$port" > /dev/null 2>&1 || echo "$port"
+      pkg rquery -I "$port" > /dev/null 2>&1 && echo "$port" || true
    done
 }
 
@@ -122,7 +122,7 @@ $PKG upgrade
 
 depends="`(for port in $to_build; do
    build_depends "$port"
-done)|sort|uniq|grep -v /pkg$|portname_filter|ignore_installed`"
+done)|sort|uniq|grep -v /pkg$|portname_filter|ignore_empty_rquery`"
 
 if [ "$depends" != "" ]; then
    $PKG install $depends

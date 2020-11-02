@@ -125,7 +125,7 @@ depends="`(for port in $to_build; do
 done)|sort|uniq|grep -v /pkg$|portname_filter|ignore_empty_rquery`"
 
 if [ "$depends" != "" ]; then
-   $PKG install $depends
+   $PKG install $depends || true
 fi
 
 #
